@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js School Management
+
+A school management system built with Next.js (App Router), Prisma, and PostgreSQL, with role-based authentication via Clerk and media uploads via Cloudinary.
+
+## Tech Stack
+
+| Layer | Tech |
+|---|---|
+| Framework | [Next.js 16](https://nextjs.org) (App Router), React 19, TypeScript |
+| Styling | Tailwind CSS v4 |
+| Auth | [Clerk](https://clerk.com) (role-based access) |
+| Database / ORM | PostgreSQL via [Prisma 7](https://www.prisma.io) (`@prisma/adapter-pg`) |
+| Forms & Validation | React Hook Form + Zod |
+| Scheduling | react-big-calendar, react-calendar |
+| Media | next-cloudinary |
+| Charts | Recharts |
+| Notifications | react-toastify |
+| Dates | moment |
+| Linting | ESLint 9 |
+
+## Project Structure
+
+```
+.
+├── app/          # Next.js App Router routes
+├── components/   # Shared React components
+├── lib/          # Utilities / server logic
+├── prisma/       # Prisma schema & migrations
+├── public/       # Static assets
+├── proxy.ts
+└── next.config.ts
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js (LTS)
+- A PostgreSQL database
+- A [Clerk](https://clerk.com) application (for auth keys)
+- A [Cloudinary](https://cloudinary.com) account (for image uploads)
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure environment variables
+
+Create a `.env` file in the project root:
+
+```bash
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/school_management"
+
+# Clerk
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+
+# Cloudinary
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+```
+
+> Adjust variable names to match what's actually read in `lib/` — this is a starting point based on the libraries in use.
+
+### 3. Set up the database
+
+```bash
+npx prisma generate
+npx prisma migrate dev
+```
+
+### 4. Run the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Media / Image Uploads
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Image uploads (e.g. student/staff photos, attachments) are handled via [Cloudinary](https://cloudinary.com) through the `next-cloudinary` package.
 
-## Learn More
+1. Create a free Cloudinary account and grab your **Cloud Name**, **API Key**, and **API Secret** from the [Cloudinary console](https://console.cloudinary.com).
+2. Set the three `CLOUDINARY_*` variables in `.env` (see above).
+3. If you're using unsigned upload presets, create one in the Cloudinary console and reference its name from the upload component.
 
-To learn more about Next.js, take a look at the following resources:
+> Check `lib/` and `components/` for the actual upload widget/component names and confirm the preset/config matches.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Available Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Command | Description |
+|---|---|
+| `npm run dev` | Start the development server |
+| `npm run build` | Build for production |
+| `npm run start` | Start the production server |
+| `npm run lint` | Run ESLint |
